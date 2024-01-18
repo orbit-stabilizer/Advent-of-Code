@@ -2,8 +2,6 @@
 
 module PartTwo where
 
--- * Imports * --
-
 import Data.Char (isDigit)
 import Data.Function ((&))
 
@@ -12,7 +10,6 @@ import qualified Data.Text.IO as T.IO
 import qualified Data.Text.Read as T.R 
 
 import PartOne (parse, makeGame, Game (..))
-
 
 main :: IO ()
 main = do

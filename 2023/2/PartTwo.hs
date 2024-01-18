@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module PartOne where
+module PartTwo where
 
 -- * Imports * --
 
@@ -68,8 +68,7 @@ makeGame text = Game gameId redCubes greenCubes blueCubes
         |> maximum
     
 calculate :: [Game] -> Int
-calculate = sum . map gameId . filter isValidGame
+calculate = sum . map power
   where
-    isValidGame :: Game -> Bool
-    isValidGame (Game {redCubes = r, greenCubes = g, blueCubes = b}) =
-      r <= maxRedCubes && g <= maxGreenCubes && b <= maxBlueCubes
+    power :: Game -> Int
+    power (Game {redCubes = r, greenCubes = g, blueCubes = b}) = r * g * b

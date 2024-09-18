@@ -12,7 +12,7 @@ parse = map (foldr f "") . lines
 
 f :: Char -> String -> String
 f c acc = 
-  case (c : acc) of
+  case c : acc of
     ('o' : 'n' : 'e'             : _) -> c : '1' : acc
     ('t' : 'w' : 'o'             : _) -> c : '2' : acc
     ('t' : 'h' : 'r' : 'e' : 'e' : _) -> c : '3' : acc

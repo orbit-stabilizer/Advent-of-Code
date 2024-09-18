@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Callable
 
 
 def parse_document(document: str) -> int:

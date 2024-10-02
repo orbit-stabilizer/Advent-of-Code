@@ -1,6 +1,6 @@
 import itertools
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 
 type Network = dict[str, tuple[str, str]]

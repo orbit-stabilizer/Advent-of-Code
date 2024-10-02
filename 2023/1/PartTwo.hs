@@ -1,5 +1,6 @@
 module PartTwo where
 
+import Data.List
 import PartOne (aggregate, calculate)
 
 main :: IO ()
@@ -11,15 +12,15 @@ parse :: String -> [String]
 parse = map (foldr f "") . lines
 
 f :: Char -> String -> String
-f c acc = 
-  case c : acc of
-    ('o' : 'n' : 'e'             : _) -> c : '1' : acc
-    ('t' : 'w' : 'o'             : _) -> c : '2' : acc
-    ('t' : 'h' : 'r' : 'e' : 'e' : _) -> c : '3' : acc
-    ('f' : 'o' : 'u' : 'r'       : _) -> c : '4' : acc
-    ('f' : 'i' : 'v' : 'e'       : _) -> c : '5' : acc
-    ('s' : 'i' : 'x'             : _) -> c : '6' : acc
-    ('s' : 'e' : 'v' : 'e' : 'n' : _) -> c : '7' : acc
-    ('e' : 'i' : 'g' : 'h' : 't' : _) -> c : '8' : acc
-    ('n' : 'i' : 'n' : 'e'       : _) -> c : '9' : acc
-    _                                 -> c : acc
+f c cs 
+  | "one"   `isPrefixOf` substr = c : '1' : cs
+  | "two"   `isPrefixOf` substr = c : '2' : cs
+  | "three" `isPrefixOf` substr = c : '3' : cs
+  | "four"  `isPrefixOf` substr = c : '4' : cs
+  | "five"  `isPrefixOf` substr = c : '5' : cs
+  | "six"   `isPrefixOf` substr = c : '6' : cs
+  | "seven" `isPrefixOf` substr = c : '7' : cs
+  | "eight" `isPrefixOf` substr = c : '8' : cs
+  | "nine"  `isPrefixOf` substr = c : '9' : cs
+  | otherwise                   = c : cs
+  where substr = c : cs

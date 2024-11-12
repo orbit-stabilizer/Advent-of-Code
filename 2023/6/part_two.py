@@ -13,13 +13,9 @@ def main(text: str) -> int:
   return ways_to_win(race)
 
 def parse_text(text: str) -> Race:
-  times, distances = text.strip().split('\n')
-  times, distances = times.split(), distances.split()
-  (_, *times), (_, *distances) = times, distances
-  time, distance = ''.join(times), ''.join(distances)
-  time, distance = int(time), int(distance)
-  race = Race(time, distance)
-  return race
+  [(_, *times), (_, *distances)] = [line.split() for line in text.strip().split('\n')]
+  time, distance = int(''.join(times)), int(''.join(distances))
+  return Race(time, distance)
 
 def ways_to_win(race: Race) -> int:
   t, d = race.time, race.distance

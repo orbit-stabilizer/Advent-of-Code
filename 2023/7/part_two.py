@@ -56,6 +56,19 @@ class Hand:
     self.type = self.find_hand_type()
     self.cards = self.get_cards()
 
+  def __lt__(self, other: Self):
+    if self.__class__ is other.__class__:
+      if self.type != other.type:
+        return self.type < other.type
+      else:
+        return self.cards < other.cards
+    return NotImplemented
+  
+  def __eq__(self, other: Self):
+    if self.__class__ is other.__class__:
+      return self.type == other.type and self.cards == other.cards
+    return NotImplemented
+
   def find_hand_type(self) -> HandType:
     unique_cards = len(set(self.hand))
     counts = Counter(self.hand)
@@ -98,19 +111,6 @@ class Hand:
   
   def get_cards(self) -> list[Card]:
     return [self.to_card(card) for card in self.hand]
-  
-  def __lt__(self, other: Self):
-    if self.__class__ is other.__class__:
-      if self.type != other.type:
-        return self.type < other.type
-      else:
-        return self.cards < other.cards
-    return NotImplemented
-  
-  def __eq__(self, other: Self):
-    if self.__class__ is other.__class__:
-      return self.type == other.type and self.cards == other.cards
-    return NotImplemented
 
 
 def main(text: str) -> int:

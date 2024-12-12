@@ -10,9 +10,8 @@ def parse(text: str) -> list[list[int]]:
 
 def predict_line(line: list[int]) -> int:
   diffs = [lead - lag for lead, lag in zip(line[1:], line)]
-  if sum(line) == 0: return 0
+  if sum(line) == 0: return 0 
   return line[-1] + predict_line(diffs)
 
 if __name__ == '__main__':
-  print(main(Path('document.txt').read_text()))
-  
+    print(main(Path('document.txt').read_text()))

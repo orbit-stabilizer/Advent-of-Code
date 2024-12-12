@@ -1,2 +1,6 @@
 # Ignore all text files
 *.txt
+.lsp
+.clj-kondo
+.cpcache
+__pycache__

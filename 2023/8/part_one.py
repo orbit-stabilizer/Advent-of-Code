@@ -15,8 +15,6 @@ class Map:
     """
     Builds an infinite repeating binary representation of the directions.
 
-    @Role: Parse data to build data structure.
-
     Input -> Output
     ---------------
     'LR'  -> (0, 1, 0, 1, 0, 1, ...)
@@ -25,20 +23,21 @@ class Map:
     Input
     -----
     raw_directions:
-      A string of arbitrary size containing only two characters: 'L' and 'R'.
-      Examples:
-        - 'RL'
-        - 'LRRRLL'
-        - 'LRLRLRLRLRRLRLRLR'
+      A string of arbitrary size containing only two characters: 'L' and 'R',
+      which give the directions one can go, left or right.
+    Examples:
+      - 'RL'
+      - 'LRRRLL'
+      - 'LRLRLRLRLRRLRLRLR'
 
     Output
     ------
     Iterator[int]:
-      An infinite iterator containing only two integers: 0 and 1.
-      Examples:
-        - (0, 1, 0, 1, 0, 1, ...)
-        - (1, 1, 0, 1, 1, 0, ...)
-        - (0, 0, 1, 0, 0, 1, ...)
+      A stream of 0s and 1s.
+    Examples:
+      - (0, 1, 0, 1, 0, 1, ...)
+      - (1, 1, 0, 1, 1, 0, ...)
+      - (0, 0, 1, 0, 0, 1, ...)
     """
     to_bin = {'L': 0, 'R': 1}
     return itertools.cycle([to_bin[c] for c in raw_directions])
@@ -49,8 +48,6 @@ class Map:
     values are 2-tuples that contain the two nodes that are accessible
     from the current node by going left or right. 
 
-    @Role: Parse data to build data structure.
-
     Input -> Output
     ---------------
     ['AAA = (BBB, CCC)', 'BBB = (CCC, AAA)', 'CCC = (ZZZ, ZZZ)']
@@ -60,13 +57,12 @@ class Map:
     Input
     -----
     raw_network:
-      A list of strings that contain the network information
+      A list of strings that contain the network information.
 
     Output
     ------
     Network:
-      A dict[str, tuple[str, str]] containing the same information as raw_network,
-      just parsed into a dict.
+      A dict version of raw_network.
     """
     network: Network = {}
     for line in raw_network:
@@ -79,8 +75,6 @@ class Map:
     """
     Navigates self.network using self.directions and finds number of steps 
     required to reach ZZZ starting from AAA.
-
-    @Role: Traverse data structure using another data structure.
     """
     node, steps, destination = 'AAA', 0, 'ZZZ'
     for direction in self.directions:

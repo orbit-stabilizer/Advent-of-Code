@@ -4,8 +4,8 @@
   (->> (slurp file-name)
        (str/split-lines)))
 
-(defn make-races [document]
-  (->> document
+(defn make-races [lines]
+  (->> lines
        (map #(re-seq #"\d+" %))
        (map #(map parse-long %))
        (apply map vector)))

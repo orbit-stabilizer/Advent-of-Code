@@ -1,6 +1,6 @@
 import itertools
 from pathlib import Path
-from typing import Iterator
+from collections.abc import Iterator
 
 
 type Network = dict[str, tuple[str, str]]
@@ -17,7 +17,8 @@ class Map:
     Builds an infinite repeating binary representation of the directions.
 
     @Role: Parse data to build data structure.
-Input -> Output
+
+    Input -> Output
     ---------------
     'LR'  -> (0, 1, 0, 1, 0, 1, ...)
     'RRL' -> (1, 1, 0, 1, 1, 0, ...)
@@ -81,85 +82,72 @@ Input -> Output
     to navigate to. Skips yielding the starting nodes (the
     ones ending with 'A').
     """
-    nodes = []
-    for key in self.network:
-      if key.endswith('A'):
-        nodes.append(key)
-
-    #nodes_to_yield = []
-    #for direction in self.directions:
-    #  for node in nodes:
-    #    nodes_to_yield.append(self.network[node][direction])
-    #  yield nodes_to_yield
-    #  nodes, nodes_to_yield = nodes_to_yield, []
-
-    threads = range(len(nodes))
-    record = {thread: {n: set() for n in range(self.cycle_len)} for thread in threads}
-    locations = {thread: 0 for thread in threads}
-    for thread in threads:
-      node, n = nodes[thread], 0
-      step = 0
-      try:
-        for direction in self.directions:
-          if node in record[thread][n]: raise ValueError
-          record[thread][n].add(node)
-          node, n = self.network[node][direction], (n + 1) % self.cycle_len
-          step += 1
-      except ValueError:
-        print(thread, node)
-        locations[thread] = step
-
-    max_location = max(locations.values())
-    thread_nodes = {thread: '' for thread in threads}
-    for thread in threads:
-      diff = max_location - locations[thread]
-      n = locations[thread]
-      for _ in range(diff):
-        node, n = self.network[node][direction], (n + 1)
-      thread_nodes[thread] = node
-      locations[thread] = n
-
-    print(locations[thread] % self.cycle_len)
-    distances = {thread: set() for thread in threads}
-    for thread in threads:
-      step = 0
-      node = thread_nodes[thread]
-      try:
-        for direction in self.directions:
-          #print(node)
-          step += 1
-          node = self.network[node][direction]
-          if node == thread_nodes[thread] and step % self.cycle_len == 2: raise ValueError
-          if node.endswith('Z'): distances[thread].add(step)
-      except ValueError:
-        print(f'step {thread}:', step)
-        pass
-
-    print(distances)
-    return thread_nodes
-  
+    nodes = [key for key in self.network if key.endswith('A')]
+    for direction in self.directions:
+      nodes_to_yield = [self.network[node][direction] for node in nodes]
+      yield nodes_to_yield
+      nodes, nodes_to_yield = nodes_to_yield, []
 
   def find_steps_required(self) -> int:
     """
-    Navigates self.network using self.parallel_navigator and finds number of steps 
-    required to reach nodes ending with 'Z'.
-
-    @Role: Traverse data structure using another data structure.
+    Navigates self.network using self.parallel_navigator and finds number 
+    of steps required to reach _Z starting from _A.
     """
-    pass
-    #steps = 0
-    #for nodes in self.parallel_navigator():
-      #steps += 1
-      #print(nodes)
-      #if all(node.endswith('Z') for node in nodes): break #return steps
+    steps = 1
+    for nodes in self.parallel_navigator():
+      if all(node.endswith('Z') for node in nodes): break
+      steps += 1
+    return steps
 
+    #threads = range(len(nodes))
+    #record: dict[int, dict[int, set[str]]] = {thread: {n: set() for n in range(self.cycle_len)} for thread in threads}
+    #locations = {thread: 0 for thread in threads}
+    #for thread in threads:
+      #node, n, step = nodes[thread], 0, 0
+      #try:
+        #for direction in self.directions:
+          #if node in record[thread][n]: raise ValueError
+          #record[thread][n].add(node)
+          #node, n = self.network[node][direction], (n + 1) % self.cycle_len
+          #step += 1
+      #except ValueError:
+        #print('hiiii')
+        #print(thread, node)
+        #locations[thread] = step
+#
+    #max_location = max(locations.values())
+    #thread_nodes = {thread: '' for thread in threads}
+    #for thread in threads:
+      #diff = max_location - locations[thread]
+      #n = locations[thread]
+      #for _ in range(diff):
+        #node, n = self.network[node][direction], (n + 1)
+      #thread_nodes[thread] = node
+      #locations[thread] = n
+#
+    #print(locations[thread] % self.cycle_len)
+    #distances = {thread: set() for thread in threads}
+    #for thread in threads:
+      #step = 0
+      #node = thread_nodes[thread]
+      #try:
+        #for direction in self.directions:
+          ##print(node)
+          #step += 1
+          #node = self.network[node][direction]
+          #if node == thread_nodes[thread] and step % self.cycle_len == 2: raise ValueError
+          #if node.endswith('Z'): distances[thread].add(step)
+      #except ValueError:
+        #print(f'step {thread}:', step)
+#
+    #print(distances)
+    #return thread_nodes
+  
 
 def main(document: str) -> int:
   map = Map(document)
-  return map.parallel_navigator()
+  return map.find_steps_required()
 
 if __name__ == '__main__':
-  #print(main(Path('sample.txt').read_text()))
-  #print(main(Path('sample_2.txt').read_text()))
-  #print(main(Path('sample_3.txt').read_text()))
+    #print(main(Path('sample_3.txt').read_text()))
   print(main(Path('z_input.txt').read_text()))
